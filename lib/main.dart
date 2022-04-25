@@ -23,13 +23,11 @@ class App extends StatelessWidget {
 class HomePage extends StatefulWidget {
   List<Item> items = [];
   TextEditingController controlador = TextEditingController();
-  
 
   HomePage() {
     items.add(Item(title: "Banana", done: false));
     items.add(Item(title: "Abacate", done: true));
     items.add(Item(title: "Laranja", done: false));
-    controlador.
   }
 
   @override
@@ -37,43 +35,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  void add()
+  {
+    setState(() {
+      widget.items.add(Item(title: widget.controlador.text, done: false));
+      widget.controlador.text = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: TextFormField(
-            controller: widget.controlador,
-            keyboardType: TextInputType.text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            ),
-            decoration: InputDecoration(
-              labelText: "Nova Tarefa",
-              labelStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 20
-              )
-            ),
+      appBar: AppBar(
+        title: TextFormField(
+          controller: widget.controlador,
+          keyboardType: TextInputType.text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
           ),
+          decoration: InputDecoration(
+              labelText: "Nova Tarefa",
+              labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
         ),
-        body: ListView.builder(
-          itemCount: widget.items.length,
-          itemBuilder: (BuildContext ctx, int index) {
-            final item = widget.items[index];
-            return CheckboxListTile(
-              title: Text(item.title!),
-              key: Key(item.title!),
-              value: item.done,
-              onChanged: (value) {
-                setState(
-                  () {
-                    item.done = value;
-                  },
-                );
-              },
-            );
-          },
-        ));
+      ),
+      body: 
+      ListView.builder(
+        itemCount: widget.items.length,
+        itemBuilder: (BuildContext ctx, int index) {
+          final item = widget.items[index];
+          return CheckboxListTile(
+            title: Text(item.title!),
+            key: Key(item.title!),
+            value: item.done,
+            onChanged: (value) {
+              setState(
+                () {
+                  item.done = value;
+                },
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () { add();
+          
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+    
   }
 }
