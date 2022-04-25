@@ -38,11 +38,21 @@ class _HomePageState extends State<HomePage> {
 
   void add()
   {
+    if (widget.controlador.text.isEmpty) return;
     setState(() {
       widget.items.add(Item(title: widget.controlador.text, done: false));
       widget.controlador.text = "";
     });
   }
+
+  void remove(int index)
+  {
+    setState(() {
+      widget.items.removeAt(index);
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +75,11 @@ class _HomePageState extends State<HomePage> {
         itemCount: widget.items.length,
         itemBuilder: (BuildContext ctx, int index) {
           final item = widget.items[index];
-          return CheckboxListTile(
-            title: Text(item.title!),
+          return Dismissible(
             key: Key(item.title!),
+            onDismissed: (direction) {remove(index);},
+            child: CheckboxListTile(
+            title: Text(item.title!),
             value: item.done,
             onChanged: (value) {
               setState(
@@ -76,13 +88,12 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             },
-          );
+          ),
+            );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { add();
-          
-        },
+        onPressed: add,
         child: Icon(Icons.add),
       ),
     );
